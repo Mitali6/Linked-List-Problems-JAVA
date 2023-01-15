@@ -36,47 +36,48 @@ public class LinkedList {
 	}
 
 	public void insertInBetween(int insertAfterKey, int key) {
-		if(head == null) {
+		if(isLinkedListEmpty()) {
 			System.out.println("Node can't be inserted as Linked List is empty");
+			return;
+		}
+		Node temp = head;
+		while(temp != null && temp.data != insertAfterKey) {
+			temp = temp.next;
+		}
+		if(temp != null) {
+			Node newNode = new Node(key);
+			newNode.next = temp.next;
+			temp.next = newNode;
 		} else {
-			Node temp = head;
-			while(temp != null && temp.data != insertAfterKey) {
-				temp = temp.next;
-			}
-			if(temp != null) {
-				Node newNode = new Node(key);
-				newNode.next = temp.next;
-				temp.next = newNode;
-			} else {
-				System.out.println("Node doesn't exist");
-			}
+			System.out.println("Node doesn't exist");
 		}
 	}
 	
 	public void deleteNode(int keyToBeDeleted) {
-		if(head == null) {
+		if(isLinkedListEmpty()) {
 			System.out.println("Node can't be deleted as Linked List is empty");
-		} else {
-			Node temp = head, prev = null;
-			if(temp.data == keyToBeDeleted) {
-				head = temp.next;
-				return;
-			}
-			while(temp != null && temp.data != keyToBeDeleted) {
-				prev = temp;
-				temp = temp.next;
-			}
-			if(temp == null) {
-				System.out.println("Node to be deleted doesn't exist");
-				return;
-			} 
-			prev.next = temp.next;
+			return;
 		}
+		Node temp = head, prev = null;
+		if(temp.data == keyToBeDeleted) {
+			head = temp.next;
+			return;
+		}
+		while(temp != null && temp.data != keyToBeDeleted) {
+			prev = temp;
+			temp = temp.next;
+		}
+		if(temp == null) {
+			System.out.println("Node to be deleted doesn't exist");
+			return;
+		} 
+		prev.next = temp.next;
+		
 	}
 
-	public int findMiddleNodeOfLinkedList(Node head) {
+	public int findMiddleNodeOfLinkedList() {
 		
-		if(head == null) {
+		if(isLinkedListEmpty()) {
 			System.out.println("Linked List is empty");
 			return -1;
 		}
@@ -87,6 +88,43 @@ public class LinkedList {
 			fast = fast.next.next;
 		}
 		return slow.data;
+	}
+
+	public int countTheOccurrenceOfAValue(Node temp, int key) {
+		if(temp == null)
+			return 0;
+		if(temp.data == key)
+			return 1 + countTheOccurrenceOfAValue(temp.next, key);
+		return countTheOccurrenceOfAValue(temp.next, key);
+	}
+
+	public boolean isCircularLinkedList() {
+		if(head == null)
+			return true;
+		Node temp = head.next;
+		while(temp != head && temp != null) {
+			temp = temp.next;
+		}
+		return (temp==head);
+	}
+
+	public int countNodesInCircularLinkedList() {
+		Node temp = head.next;
+		int count = 1;
+		if(head != null) {
+			while(temp != head) {
+				temp = temp.next;
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public boolean isLinkedListEmpty() {
+		if(head == null) {
+			return true;
+		}
+		return false;
 	}
 
 }
